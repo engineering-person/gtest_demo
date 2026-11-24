@@ -1,10 +1,10 @@
-name: C++ Backend CI
+name: CI Build & Test Artifact
 on:
   push:
   pull_request:
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -15,9 +15,39 @@ jobs:
           sudo apt update
           sudo apt install -y cmake g++ libgtest-dev
 
-      - name: Build
+      - name: Run build
         run: |
-          mkdir build && cd build
-          cmake ..
-          make -j$(nproc)
+          chmod +x scripts/build.sh
+          ./scripts/build.sh
 
+      # 上传编译产物（build文件夹）
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-output
+          path: build/
+          retention-days: 7
+
+  test:
+    needs: build  # 必须等 build job 成功之后，才会执行 test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y cmake g++ libgtest-dev
+
+      # 下载上一步 build 产出的 build 目录
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: build-output
+          path: build/
+
+      - name: Run unit test
+        run: |
+          chmod +x scripts/test.sh
+          ./scripts/test.sh
