@@ -11,6 +11,8 @@ SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
 aux_source_directory(src/ SRC_LIST)
 add_executable(main ${SRC_LIST})
 
+include(cmake/algorithm_options.cmake)
+
 # 
 
 if(MY_CMAKE_BUILD_FLAGS STREQUAL "real")
