@@ -1,10 +1,8 @@
-#include <iostream>
-#include <vector>
-#include <stdint.h>
-
 /*
     错误码返回算法库：应用软件为了方便定位问题，返回错误码；仿真认为性能要求比较高，不返回
 */
+#pragma once
+#include "log.h"
 
 enum class ErrorCode : uint32_t {
     SUCCESS = 0,
@@ -24,16 +22,6 @@ struct ErrorInfo
 };
 
 
-/*
-    模拟日志打印：应用软件为了方便定位问题，打印日志；仿真认为性能要求比较高，不打印日志
-*/
-
-#ifdef REAL
-#define LOG_ERR(...) std::cout << __VA_ARGS__ << std::endl;
-#else
-#define LOG_ERR(...) do {} while(0)
-#endif
-
 
 
 
@@ -52,20 +40,4 @@ inline void CalInterface(const std::string& input, ErrorInfo& err)
         err << ErrorCode::PARAM_INVALID;
         LOG_ERR("只有应用软件才会打印日志......i = " << i << ", code = " << uint32_t(ErrorCode::PARAM_INVALID));
     }
-}
-
-/*
-    mkdir build
-    cd build
-    每次编译一定要，因为有缓存
-    cmake .. -DMY_CMAKE_BUILD_FLAGS=real   /   cmake .. 
-    make 
-*/
-
-int main()
-{
-    ErrorInfo err;
-    CalInterface("111111", err);
-    std::cout << "err::errVec size: " << err.errVec.size() << std::endl;
-    return 0;
 }

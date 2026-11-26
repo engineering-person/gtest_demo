@@ -5,11 +5,12 @@ project(main)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17")
 set(CMAKE_BUILD_TYPE Debug)
 
-add_subdirectory(test/)
+
+add_subdirectory(src/app/)
+add_subdirectory(src/cal/)
 
 SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
-aux_source_directory(src/ SRC_LIST)
-add_executable(main ${SRC_LIST})
+
 
 include(cmake/algorithm_options.cmake)
 
@@ -27,4 +28,10 @@ elseif(MY_CMAKE_BUILD_FLAGS STREQUAL "gazebo")
     add_compile_definitions(
         GAZEBO
     )
+endif()
+
+
+if(BUILD_TESTING)
+  enable_testing()
+  add_subdirectory(test/)
 endif()
