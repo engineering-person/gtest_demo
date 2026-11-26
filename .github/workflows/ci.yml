@@ -18,7 +18,7 @@ jobs:
       - name: Run build
         run: |
           chmod +x scripts/build.sh
-          ./scripts/build.sh
+          ./scripts/build.sh -DBUILD_TESTING=ON
 
       # 上传编译产物（build文件夹）
       - name: Upload build artifacts

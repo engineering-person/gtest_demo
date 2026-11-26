@@ -15,5 +15,4 @@ target_include_directories(run_test PUBLIC
 target_link_libraries(run_test cal)
 
 # 注册给ctest，让流水线脚本可以用ctest跑
-enable_testing()
 add_test(NAME AllGTest COMMAND run_test)
